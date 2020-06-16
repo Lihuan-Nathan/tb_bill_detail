@@ -77,7 +77,7 @@ def export_excel(results,results1):
 
 def send_email(path):
     fromaddr = '846848165@qq.com'
-    password = 'slpfsuiietdybbeb'
+    password = '222222233433eb'
     toaddrs = ['1248773869@qq.com','784957072@qq.com']
 
 
