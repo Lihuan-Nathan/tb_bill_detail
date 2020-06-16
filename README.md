@@ -1,0 +1,2 @@
+# tb_bill_detail
+在mysql建立订单表和收货明细表，通过mysqlclient(MySQLdb)连接本地数据库，通过xlwt写邮件，通过smtplib发送邮件
