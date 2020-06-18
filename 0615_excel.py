@@ -27,9 +27,45 @@ def export_excel(results,results1):
     bill_keys = ['快递送达时间','快递单号','退货订单编号','收货店铺','SKU','订单数量(件)','质检情况']
     # 
 
+    # 设置表头对齐方式
+    style_head = xlwt.XFStyle()  # 创建一个样式对象，初始化样式
+    al_head = xlwt.Alignment()
+    al_head.horz = 0x02      # 设置水平居中
+    al_head.vert = 0x01      # 设置垂直居中
+    style_head.alignment = al_head
     
-    re_sheet.write_merge(0,0,0,len(receiving_keys)-1,'收货报表')
-    bill_sheet.write_merge(0,0,0,len(receiving_keys)-1,'订单信息')
+
+    # 设置背景颜色
+    pt_head = xlwt.Pattern()
+    # 设置背景颜色的模式
+    pt_head.pattern = xlwt.Pattern.SOLID_PATTERN
+    # 背景颜色
+    pt_head.pattern_fore_colour = 24
+    style_head.pattern = pt_head
+
+    # 表头字体设置
+    pt_ft = xlwt.Font()
+    pt_ft.bold = True   #加粗
+    pt_ft.height = 30*11
+    style_head.font = pt_ft
+    
+    tall_style = xlwt.easyxf('font:height 720')  # 表头高设计（表头的下标是0）
+    re_sheet.row(0).set_style(tall_style)
+
+    # 设置收货表单正文样式
+    style_re = xlwt.XFStyle()  # 创建一个样式对象，初始化样式
+
+    # 设置正文字体
+    ft_re = xlwt.Font()
+    ft_re.height=20*11
+    style_re.font=ft_re
+    
+    # 设置列宽
+    for re in receiving_keys:
+        re_sheet.col(receiving_keys.index(re)).width = 11 * 500   # 循环设置每列的宽都是一样的
+
+    re_sheet.write_merge(0,0,0,len(receiving_keys)-1,'收货报表',style_head)
+    bill_sheet.write_merge(0,0,0,len(bill_keys)-1,'订单信息')
 
     
     path = 'C:\\Users\\Administrator\\\Desktop\\0615\\rece'
@@ -38,7 +74,7 @@ def export_excel(results,results1):
     
     
     for key in receiving_keys:
-        re_sheet.write(1,receiving_keys.index(key),str(key))
+        re_sheet.write(1,receiving_keys.index(key),str(key),style_re)
     
     for key in bill_keys:
         bill_sheet.write(1,bill_keys.index(key),str(key))
@@ -51,7 +87,7 @@ def export_excel(results,results1):
             # id 不用导出，所以跳过
             if re.index(r) == 0:
                 continue
-            re_sheet.write(row,col,r)
+            re_sheet.write(row,col,r,style_re)    # 这里加上了re表正文的格式
             col = col+1
         row = row+1
 
@@ -77,8 +113,8 @@ def export_excel(results,results1):
 
 def send_email(path):
     fromaddr = '846848165@qq.com'
-    password = '222222233433eb'
-    toaddrs = ['1248773869@qq.com','784957072@qq.com']
+    password = 'kejkxljzxvurbdfj'
+    toaddrs = ['1248773869@qq.com']
 
 
     content = 'hello, this is email content.'
@@ -119,6 +155,3 @@ result = cur.fetchall()
 cur.execute('select * from bill')
 result1 = cur.fetchall()
 export_excel(result,result1)
-
-
-    
